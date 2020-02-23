@@ -7,7 +7,7 @@ class NodeController extends Controller {
     const { ctx } = this;
     const node = await this.ctx.model.Node.findAll({ order: [['id', 'DESC']] });
     ctx.body = {
-      nodes: node
+      result: node
     };
   }
 }

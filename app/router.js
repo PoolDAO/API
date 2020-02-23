@@ -9,6 +9,7 @@ module.exports = app => {
   router.get("/msg", controller.msg.index);
   router.get("/node", controller.node.index);
   router.get("/operator", controller.operator.index);
-  router.get("/overview", controller.overview.index);
+  router.get("/overview/", controller.overview.index);
+  router.get("/overview/:user", controller.overview.findByUser);
   router.get("/user", controller.user.index);
 };

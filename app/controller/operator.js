@@ -7,7 +7,7 @@ class OperatorController extends Controller {
     const { ctx } = this;
     const operator = await this.ctx.model.Operator.findAll({ order: [['id', 'DESC']] });
     ctx.body = {
-      operators: operator
+      result: operator
     };
   }
 }

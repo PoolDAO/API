@@ -7,7 +7,7 @@ class UserController extends Controller {
     const { ctx } = this;
     const user = await this.ctx.model.User.findAll();
     ctx.body = {
-      users: user
+      result: user
     };
   }
 }

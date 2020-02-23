@@ -19,6 +19,12 @@ module.exports = app => {
 
   Overview.removeAttribute('id')
 
+  Overview.findByUser = async function(user) {
+    return await this.findOne({
+      where: { user }
+    });
+  }
+
   return Overview;
 };
   

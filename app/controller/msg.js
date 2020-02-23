@@ -7,7 +7,7 @@ class MsgController extends Controller {
     const { ctx } = this;
     const msg = await this.ctx.model.Msg.findAll({ order: [['time', 'DESC']] });
     ctx.body = {
-      msgs: msg
+      result: msg
     };
   }
 }
