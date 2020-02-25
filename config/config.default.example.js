@@ -23,6 +23,16 @@ module.exports = appInfo => {
     // myAppName: 'egg',
   };
 
+  config.onerror = {
+    accepts() {
+      return 'json';
+    },
+    json(err, ctx) { 
+      ctx.body = { error: { code: -32603, message: err.message } };
+      ctx.status = 200;
+    }
+  }
+
   config.sequelize = {
     dialect: "",
     database: "",
