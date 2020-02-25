@@ -43,17 +43,28 @@ module.exports = app => {
     }
   );
 
-  Node.findAllNodes = function() {
-    return this.findAll({
-      order: [["id", "DESC"]]
-    });
+  const covertNode = node => {
+    return {
+      ...node,
+      statusTime: app.parseJSON(node.statusTime, []),
+      depositList: app.parseJSON(node.depositList, []),
+      withdrawList: app.parseJSON(node.withdrawList, [])
+    };
   };
 
-  Node.findByOwner = function(owner) {
+  Node.findAllNodes = async function() {
+    return (
+      await this.findAll({
+        order: [["id", "DESC"]]
+      })
+    ).map(node => covertNode(node.toJSON()));
+  };
+
+  Node.findByOwner = async function(owner) {
     return this.findAll({
       where: { owner },
       order: [["id", "DESC"]]
-    });
+    }).map(node => covertNode(node.toJSON()));
   };
 
   return Node;

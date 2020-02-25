@@ -23,12 +23,7 @@ class NodeController extends Controller {
       };
     } else {
       ctx.body = {
-        result: nodes.map(node => ({
-          ...node,
-          statusTime: this.app.parseJSON(node.statusTime, []),
-          depositList: this.app.parseJSON(node.depositList, []),
-          withdrawList: this.app.parseJSON(node.withdrawList, [])
-        }))
+        result: nodes
       };
     }
   }
