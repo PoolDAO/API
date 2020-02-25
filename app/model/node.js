@@ -43,5 +43,18 @@ module.exports = app => {
     }
   );
 
+  Node.findAllNodes = function() {
+    return this.findAll({
+      order: [["id", "DESC"]]
+    });
+  };
+
+  Node.findByOwner = function(owner) {
+    return this.findAll({
+      where: { owner },
+      order: [["id", "DESC"]]
+    });
+  };
+
   return Node;
 };

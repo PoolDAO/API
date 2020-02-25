@@ -18,20 +18,15 @@ module.exports = appInfo => {
   // add your middleware config here
   config.middleware = [];
 
-  // add your user config here
-  const userConfig = {
-    // myAppName: 'egg',
-  };
-
   config.onerror = {
     accepts() {
-      return 'json';
+      return "json";
     },
-    json(err, ctx) { 
+    json(err, ctx) {
       ctx.body = { error: { code: -32603, message: err.message } };
       ctx.status = 200;
     }
-  }
+  };
 
   config.sequelize = {
     dialect: "",
@@ -42,8 +37,12 @@ module.exports = appInfo => {
     password: ""
   };
 
+  config.cors = {
+    enable: true,
+    package: "egg-cors"
+  };
+
   return {
     ...config,
-    ...userConfig
   };
 };

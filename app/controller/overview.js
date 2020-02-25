@@ -10,7 +10,6 @@ class OverviewController extends Controller {
     ctx.body = {
       result: overview || []
     };
-    
   }
 
   async findByUser() {
@@ -23,7 +22,7 @@ class OverviewController extends Controller {
           message: `Can't find overview of user ${this.ctx.params.user}.`
         }
       };
-    } else { 
+    } else {
       ctx.body = {
         result: overview
       };
