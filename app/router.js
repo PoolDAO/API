@@ -13,4 +13,5 @@ module.exports = app => {
   router.get("/overview/", controller.overview.index);
   router.get("/overview/:user", controller.overview.findByUser);
   router.get("/user", controller.user.index);
+  router.get("/user/:user", controller.user.findByUser);
 };

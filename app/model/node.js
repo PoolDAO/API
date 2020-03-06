@@ -2,6 +2,7 @@ const BN = require("bn.js");
 
 module.exports = app => {
   const { STRING, BIGINT } = app.Sequelize;
+  const Op = app.Sequelize.Op;
 
   const Node = app.model.define(
     "node",
@@ -74,7 +75,12 @@ module.exports = app => {
 
   Node.findAllNodes = async function(params) {
     const options = {
-      order: [["id", "DESC"]]
+      order: [["id", "DESC"]],
+      where: {
+        pk: {
+          [Op.ne]: null
+        }
+      }
     };
 
     if (params.owner) {
@@ -98,7 +104,12 @@ module.exports = app => {
 
   Node.findByNodeId = async function(nodeId) {
     const options = {
-      where: { id: Number(nodeId) }
+      where: {
+        id: Number(nodeId),
+        pk: {
+          [Op.ne]: null
+        }
+      }
     };
     const result = await this.findOne(options);
     return result && covertNode(result.toJSON());

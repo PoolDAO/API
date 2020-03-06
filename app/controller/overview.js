@@ -6,7 +6,7 @@ const Controller = require("egg").Controller;
 class OverviewController extends Controller {
   async index() {
     const { ctx } = this;
-    const overview = await this.ctx.model.Overview.findAll();
+    const overview = await ctx.model.Overview.findAll();
     ctx.body = {
       result: overview || []
     };
@@ -14,12 +14,12 @@ class OverviewController extends Controller {
 
   async findByUser() {
     const { ctx } = this;
-    const overview = await this.ctx.model.Overview.findByUser(this.ctx.params.user);
+    const overview = await ctx.model.Overview.findByUser(ctx.params.user);
     if (overview === null) {
       ctx.body = {
         error: {
           code: -32001,
-          message: `Can't find overview of user ${this.ctx.params.user}.`
+          message: `Can't find overview of user ${ctx.params.user}.`
         }
       };
     } else {

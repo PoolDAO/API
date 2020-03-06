@@ -11,11 +11,29 @@ module.exports = app => {
     {
       freezeTableName: true,
       timestamps: false,
-      underscored: false,
+      underscored: false
     }
   );
 
-  User.removeAttribute('id')
+  User.removeAttribute("id");
+
+  User.findByUser = async function(user) {
+    const options = {
+      where: {
+        user: user
+      }
+    };
+    const result = await this.findAll(options);
+    return (
+      result &&
+      result.map(({ user, nodeID, time }) => {
+        return {
+          nodeId: String(nodeID),
+          time
+        };
+      })
+    );
+  };
 
   return User;
 };

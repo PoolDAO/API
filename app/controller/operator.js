@@ -4,8 +4,8 @@ const Controller = require("egg").Controller;
 
 class OperatorController extends Controller {
   async index() {
-    const { ctx } = this;
-    const operator = await this.ctx.model.Operator.findAll({ order: [['id', 'DESC']] });
+    const { ctx } = this
+    const operator = await ctx.model.Operator.findAll({ order: [['id', 'DESC']] });
     ctx.body = {
       result: operator
     };
