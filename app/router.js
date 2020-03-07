@@ -9,7 +9,9 @@ module.exports = app => {
   router.get("/msg", controller.msg.index);
   router.get("/node", controller.node.index);
   router.get("/node/:nodeId", controller.node.findByNodeId);
-  router.get("/operator", controller.operator.index);
+  router.get("/node/my/:owner", controller.node.findByOwner);
+  router.get("/operators", controller.operator.findOperators);
+  router.get("/operators/:operatorId", controller.operator.findOperatorDetail);
   router.get("/overview/", controller.overview.index);
   router.get("/overview/:user", controller.overview.findByUser);
   router.get("/user", controller.user.index);

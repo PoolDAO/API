@@ -26,6 +26,7 @@ module.exports = app => {
       statusTime: STRING,
       duration: BIGINT,
       balance: BIGINT,
+      operator: STRING,
       operatorDeposit: BIGINT,
       userDepositTotal: BIGINT,
       minShardingDeposit: BIGINT,
@@ -47,28 +48,74 @@ module.exports = app => {
   );
 
   const covertNode = node => {
-    const statusList = app.parseJSON(node.statusTime, []);
-    const depositList = app.parseJSON(node.depositList, []);
-    const withdrawList = app.parseJSON(node.withdrawList, []);
-    const targetDeposit = `${32 * Math.pow(10, 18)}`;
-    const userDepositTotal = String(node.userDepositTotal || 0);
-    const operatorDeposit = String(node.operatorDeposit || 0);
-    const totalDeposit = new BN(userDepositTotal)
-      .add(new BN(operatorDeposit))
-      .toString();
+    if (node.address) {
+      node.address = node.address.toLowerCase();
+    }
+    if (node.owner) {
+      node.owner = node.owner.toLowerCase();
+    }
+    if (node.nodeManager) {
+      node.nodeManager = node.nodeManager.toLowerCase();
+    }
+    if (node.operator) {
+      node.operator = node.operator.toLowerCase();
+    }
+    if (node.partner) {
+      node.partner = node.partner.toLowerCase();
+    }
+    if (node.dao) {
+      node.dao = node.dao.toLowerCase();
+    }
+    if (node.pk) {
+      node.pk = node.pk.toLowerCase();
+    }
+    if (node.validatorSignature) {
+      node.validatorSignature = node.validatorSignature.toLowerCase();
+    }
+    if (node.withdrawalCredentials) {
+      node.withdrawalCredentials = node.withdrawalCredentials.toLowerCase();
+    }
+    if (node.depositData) {
+      node.depositData = node.depositData.toLowerCase();
+    }
+    if (node.validatorSignature) {
+      node.validatorSignature = node.validatorSignature.toLowerCase();
+    }
+    if (node.validatorSignature) {
+      node.validatorSignature = node.validatorSignature.toLowerCase();
+    }
+    const statusTime = app.parseJSON(node.statusTime, []).map(result => {
+      result.time = Number(result.time);
+      return result;
+    });
+    const depositList = app.parseJSON(node.depositList, []).map(result => {
+      result.time = Number(result.time);
+      result.addr = result.addr && result.addr.toLowerCase();
+      return result;
+    });
+    const withdrawList = app.parseJSON(node.withdrawList, []).map(result => {
+      result.time = Number(result.time);
+      result.addr = result.addr && result.addr.toLowerCase();
+      return result;
+    });
 
     return {
       ...node,
       id: String(node.id),
-      statusList,
+      statusTime,
       depositList,
       withdrawList,
-      userDepositTotal,
-      operatorDeposit,
-      targetDeposit,
-      totalDeposit,
+      userDepositTotal: String(node.userDepositTotal || 0),
+      operatorDeposit: String(node.operatorDeposit || 0),
+      depositCapacity: String(node.depositCapacity || 0),
+      minShardingDeposit: String(node.minShardingDeposit || 0),
+      reward: String(node.reward || 0),
+      ownerFee: String(node.ownerFee || 0),
+      daoFee: String(node.daoFee || 0),
+      partnerFee: String(node.partnerFee || 0),
+      balance: String(node.balance || 0),
       startTime: Number(
-        (statusList.find(({ status }) => status === "Start") || {}).time
+        (statusTime.find(({ status }) => status === "Start") || {}).time
       )
     };
   };
@@ -90,9 +137,9 @@ module.exports = app => {
     if (params.status) {
       const lowerStatus = status.toLowerCase();
 
-      if (["start", "raising", "preLaunch"].includes(lowerStatus)) {
+      if (["start", "raising", "prelaunch"].includes(lowerStatus)) {
         options.where.status = ["Start", "Raising", "PreLaunch"];
-      } else if (["staking", "pendingSettlement"].includes(lowerStatus)) {
+      } else if (["staking", "pendingsettlement"].includes(lowerStatus)) {
         options.where.status = ["Staking", "PendingSettlement"];
       } else if (["completed", "revoked"].includes(lowerStatus)) {
         options.where.status = ["Completed", "Revoked"];
@@ -104,6 +151,7 @@ module.exports = app => {
 
   Node.findByNodeId = async function(nodeId) {
     const options = {
+      order: [["id", "DESC"]],
       where: {
         id: Number(nodeId),
         pk: {
@@ -113,6 +161,17 @@ module.exports = app => {
     };
     const result = await this.findOne(options);
     return result && covertNode(result.toJSON());
+  };
+
+  Node.findByIds = async function(ids = []) {
+    const options = {
+      order: [["id", "DESC"]],
+      where: {
+        id: ids.map(id => Number(id))
+      }
+    };
+
+    return this.findAll(options).map(node => covertNode(node.toJSON()));
   };
 
   return Node;

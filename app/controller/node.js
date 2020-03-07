@@ -13,9 +13,7 @@ class NodeController extends Controller {
 
   async findByNodeId() {
     const { ctx } = this;
-    const node = await ctx.model.Node.findByNodeId(
-      ctx.params.nodeId
-    );
+    const node = await ctx.model.Node.findByNodeId(ctx.params.nodeId);
     if (node === null) {
       ctx.body = {
         error: {
@@ -26,6 +24,26 @@ class NodeController extends Controller {
     } else {
       ctx.body = {
         result: node
+      };
+    }
+  }
+
+  async findByOwner() {
+    const { ctx } = this;
+    const userDeposit = await ctx.model.User.findByUser(ctx.params.owner);
+    const ids = userDeposit.map(({ nodeId }) => Number(nodeId));
+
+    const nodeList = await ctx.model.Node.findByIds(ids);
+    if (nodeList === null) {
+      ctx.body = {
+        error: {
+          code: -32001,
+          message: `Can't find node of user ${ctx.params.owner}.`
+        }
+      };
+    } else {
+      ctx.body = {
+        result: nodeList
       };
     }
   }
