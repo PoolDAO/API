@@ -38,7 +38,8 @@ module.exports = app => {
       ownerFee: BIGINT,
       daoFee: BIGINT,
       partnerFee: BIGINT,
-      time: BIGINT
+      time: BIGINT,
+      rate: BIGINT
     },
     {
       freezeTableName: true,

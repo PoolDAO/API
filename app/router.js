@@ -6,7 +6,8 @@
 module.exports = app => {
   const { router, controller } = app;
   router.get("/", controller.home.index);
-  router.get("/msg", controller.msg.index);
+  router.get("/msgs", controller.msg.index);
+  router.get("/msgs/:user", controller.msg.findByUser);
   router.get("/node", controller.node.index);
   router.get("/node/:nodeId", controller.node.findByNodeId);
   router.get("/node/my/:owner", controller.node.findByOwner);
