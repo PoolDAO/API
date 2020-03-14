@@ -117,7 +117,16 @@ module.exports = app => {
       balance: String(node.balance || 0),
       startTime: Number(
         (statusTime.find(({ status }) => status === "Start") || {}).time
-      )
+      ),
+      statusText: ["Start", "Raising"].includes(node.status)
+        ? "募集中"
+        : ["PreLaunch"].includes(node.status)
+        ? "待启动"
+        : ["Staking", "PendingSettlement"].includes(node.status)
+        ? "运行中"
+        : ["Completed", "Revoked"].includes(node.status)
+        ? "已清算"
+        : null
     };
   };
 
