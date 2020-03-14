@@ -100,14 +100,21 @@ module.exports = app => {
       return result;
     });
 
+    const userDepositTotal = String(node.userDepositTotal || 0);
+    const operatorDeposit = String(node.operatorDeposit || 0);
+    const totalDeposit = new BN(userDepositTotal)
+      .add(new BN(operatorDeposit))
+      .toString();
+
     return {
       ...node,
       id: String(node.id),
       statusTime,
       depositList,
       withdrawList,
-      userDepositTotal: String(node.userDepositTotal || 0),
-      operatorDeposit: String(node.operatorDeposit || 0),
+      userDepositTotal,
+      operatorDeposit,
+      totalDeposit,
       depositCapacity: String(node.depositCapacity || 0),
       minShardingDeposit: String(node.minShardingDeposit || 0),
       reward: String(node.reward || 0),
