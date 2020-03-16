@@ -5,6 +5,7 @@ module.exports = app => {
     id: { type: BIGINT, primaryKey: true },
     user: STRING,
     msg: STRING,
+    txid: STRING,
     relatedId: BIGINT,
     value: BIGINT,
     time: BIGINT
