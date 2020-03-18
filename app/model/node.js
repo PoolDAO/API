@@ -125,12 +125,12 @@ module.exports = app => {
       startTime: Number(
         (statusTime.find(({ status }) => status === "Start") || {}).time
       ),
-      statusText: ["Start", "Raising"].includes(node.status)
-        ? "募集中"
-        : ["PreLaunch"].includes(node.status)
+      statusText: ["Start", "Raising", "PreLaunch"].includes(node.status)
         ? "待启动"
-        : ["Staking", "PendingSettlement"].includes(node.status)
+        : ["Staking"].includes(node.status)
         ? "运行中"
+        : ["PendingSettlement"].includes(node.status)
+        ? "待清算"
         : ["Completed", "Revoked"].includes(node.status)
         ? "已清算"
         : null
@@ -154,10 +154,12 @@ module.exports = app => {
     if (params.status) {
       const lowerStatus = status.toLowerCase();
 
-      if (["start", "raising", "prelaunch"].includes(lowerStatus)) {
+      if (["start", "raising", "preLaunch"].includes(lowerStatus)) {
         options.where.status = ["Start", "Raising", "PreLaunch"];
-      } else if (["staking", "pendingsettlement"].includes(lowerStatus)) {
-        options.where.status = ["Staking", "PendingSettlement"];
+      } else if (["staking"].includes(lowerStatus)) {
+        options.where.status = ["Staking"];
+      } else if (["pendingsettlement"].includes(lowerStatus)) {
+        options.where.status = ["PendingSettlement"];
       } else if (["completed", "revoked"].includes(lowerStatus)) {
         options.where.status = ["Completed", "Revoked"];
       }
