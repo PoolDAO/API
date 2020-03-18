@@ -6,7 +6,7 @@ class MsgController extends Controller {
   async index() {
     const { ctx } = this;
     const msg = await ctx.model.Msg.findAll({
-      order: [["time", "ASC"]],
+      order: [["id", "DESC"]],
       limit: 10
     });
     ctx.body = {
@@ -18,7 +18,7 @@ class MsgController extends Controller {
     const { ctx } = this;
     const msg = await ctx.model.Msg.findAll({
       where: { user: ctx.params.user },
-      order: [["time", "ASC"]],
+      order: [["id", "DESC"]],
       limit: 10
     });
     ctx.body = {
