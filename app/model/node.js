@@ -48,6 +48,19 @@ module.exports = app => {
     }
   );
 
+  const getStatusText = _status => {
+    const status = _status.toLowerCase();
+    return ["start", "raising", "prelaunch"].includes(status)
+      ? "待启动"
+      : ["staking"].includes(status)
+      ? "运行中"
+      : ["pendingsettlement"].includes(status)
+      ? "待清算"
+      : ["completed", "revoked"].includes(status)
+      ? "已清算"
+      : null;
+  };
+
   const covertNode = node => {
     if (node.address) {
       node.address = node.address.toLowerCase();
@@ -87,6 +100,7 @@ module.exports = app => {
     }
     const statusTime = app.parseJSON(node.statusTime, []).map(result => {
       result.time = Number(result.time);
+      result.statusText = getStatusText(node.status);
       return result;
     });
     const depositList = app.parseJSON(node.depositList, []).map(result => {
@@ -125,15 +139,7 @@ module.exports = app => {
       startTime: Number(
         (statusTime.find(({ status }) => status === "Start") || {}).time
       ),
-      statusText: ["Start", "Raising", "PreLaunch"].includes(node.status)
-        ? "待启动"
-        : ["Staking"].includes(node.status)
-        ? "运行中"
-        : ["PendingSettlement"].includes(node.status)
-        ? "待清算"
-        : ["Completed", "Revoked"].includes(node.status)
-        ? "已清算"
-        : null
+      statusText: getStatusText(node.status)
     };
   };
 
