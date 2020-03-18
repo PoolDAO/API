@@ -58,7 +58,7 @@ module.exports = app => {
       ? "待清算"
       : ["completed", "revoked"].includes(status)
       ? "已清算"
-      : null;
+      : _status;
   };
 
   const covertNode = node => {
@@ -100,7 +100,7 @@ module.exports = app => {
     }
     const statusTime = app.parseJSON(node.statusTime, []).map(result => {
       result.time = Number(result.time);
-      result.statusText = getStatusText(node.status);
+      result.statusText = getStatusText(result.status);
       return result;
     });
     const depositList = app.parseJSON(node.depositList, []).map(result => {
