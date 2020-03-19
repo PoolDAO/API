@@ -8,6 +8,7 @@ module.exports = app => {
     end: BIGINT,
     pending: BIGINT,
     deposit: BIGINT,
+    pendingsettlement: BIGINT,
     profit: BIGINT,
     rate: BIGINT,
     time: BIGINT
